@@ -14,7 +14,7 @@ export default {
       type: Array,
       required: false,
       default: function _default() {
-        return [0.2];
+        return [0, 0.2];
       }
     },
     root: {
@@ -30,6 +30,11 @@ export default {
       default: function _default() {
         return '0px 0px 0px 0px';
       }
+    }
+  },
+  methods: {
+    disconnect: function disconnect() {
+      this.observer.disconnect();
     }
   },
   created: function created() {
@@ -60,11 +65,13 @@ export default {
         return;
       }
 
+      _this2.$on('disconnect', _this2.disconnect);
+
       _this2.observer.observe(_this2.$slots.default[0].elm);
     });
   },
   destroyed: function destroyed() {
-    this.observer.disconnect();
+    this.disconnect();
   },
   render: function render() {
     return this.$slots.default ? this.$slots.default[0] : null;

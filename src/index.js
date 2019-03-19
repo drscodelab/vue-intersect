@@ -26,6 +26,11 @@ export default {
       default: () => '0px 0px 0px 0px'
     }
   },
+  methods: {
+    disconnect () {
+      this.observer.disconnect()
+    }
+  },
   created () {
     this.observer = new IntersectionObserver((entries) => {
       if (!entries[0].isIntersecting) {
@@ -50,11 +55,13 @@ export default {
         return
       }
 
+      this.$on('disconnect', this.disconnect)
+
       this.observer.observe(this.$slots.default[0].elm)
     })
   },
   destroyed () {
-    this.observer.disconnect()
+    this.disconnect()
   },
   render () {
     return this.$slots.default ? this.$slots.default[0] : null
